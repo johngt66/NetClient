@@ -35,7 +35,7 @@ namespace ZTRWpf
             Application.Current.MainWindow.WindowState = WindowState.Maximized;
             rc = new ZTRWpf.RobotConnection();
             lastMsg = string.Empty;
-            txtIpAddress.Text = "192.168.1.105";
+            txtIpAddress.Text = "192.168.1.102";
             //Touch.FrameReported += new TouchFrameEventHandler(Touch_FrameReported);
         }
 
