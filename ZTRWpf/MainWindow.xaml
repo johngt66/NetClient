@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ZTRWpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="900">
+        Title="MainWindow" Height="900" Width="700">
     <Grid>
         <Canvas x:Name="canvas1"
-                Background="Black" Margin="10,20,10,20" HorizontalAlignment="Left" Width="200" TouchDown="canvas1_TouchDown" TouchMove="canvas1_TouchMove" TouchUp="canvas1_TouchUp"/>
-        <Canvas x:Name="canvas2" HorizontalAlignment="right" Width="200"
+                Background="Black" Margin="9,20,0,250" HorizontalAlignment="Left" Width="200" TouchDown="canvas1_TouchDown" TouchMove="canvas1_TouchMove" TouchUp="canvas1_TouchUp"/>
+        <Canvas x:Name="canvas2" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="680" Height="200"
                 Background="Black" Margin="10,20,10,20" TouchDown="canvas2_TouchDown" TouchMove="canvas2_TouchMove" TouchUp="canvas2_TouchUp" />
  
         <Label x:Name="label" Content="Ip Address" HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top"

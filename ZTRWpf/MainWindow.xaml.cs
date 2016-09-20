@@ -29,14 +29,21 @@ namespace ZTRWpf
 
         const int numFactor = 11;
         const int demFactor = 10;
+
+        public int LeftAdj { get; private set; }
+        public int RightAdj { get; private set; }
+        public int Speed { get; private set; }
+
         public MainWindow()
         {
             InitializeComponent();
             Application.Current.MainWindow.WindowState = WindowState.Maximized;
             rc = new ZTRWpf.RobotConnection();
             lastMsg = string.Empty;
-            txtIpAddress.Text = "192.168.1.105";
-            //Touch.FrameReported += new TouchFrameEventHandler(Touch_FrameReported);
+            txtIpAddress.Text = "192.168.1.102";
+            LeftAdj = 0;
+            RightAdj = 0;
+            Speed = 0;
         }
 
         private void SetText(int lPos, int rPos)
@@ -68,36 +75,85 @@ namespace ZTRWpf
             if (Math.Abs(rPos) > 100) rPos = 100 * rPos / Math.Abs(rPos);
             SetText(lPos, rPos);
         }
+        private void SetSpeed(TouchEventArgs e)
+        {
+            var h = (int)(canvas1.ActualHeight) / 2;
+            lPos = (h - (int)e.GetTouchPoint(canvas1).Position.Y) * numFactor / h * demFactor;
+            if (Math.Abs(lPos) > 100) lPos = 100 * lPos / Math.Abs(lPos);
+            Speed = lPos;
+            SendSpeed();
+        }
+        private void SetRatio(TouchEventArgs e)
+        {
+            var w = (int)(canvas2.ActualWidth * 0.90d) / 2;
+            rPos = (w - (int)e.GetTouchPoint(canvas2).Position.X) * numFactor / w * demFactor;
+            if (Math.Abs(rPos) > 100) rPos = 100 * rPos / Math.Abs(rPos);
+
+            if (Speed != 0)
+            {
+                LeftAdj = 0;
+                RightAdj = 0;
+                if (rPos > 0)
+                    LeftAdj = rPos;
+                else if (rPos < 0)
+                    RightAdj = -rPos;
+            }
+            else
+            {
+                RightAdj = rPos;
+                LeftAdj = -rPos;
+            }
+            SendSpeed();
+        }
+
+        private void SendSpeed()
+        {
+            if (Speed != 0)
+            {
+                lPos = Speed * (100 - LeftAdj) / 100;
+                rPos = Speed * (100 - RightAdj) / 100;
+            }
+            else
+            {
+                lPos = LeftAdj;
+                rPos = RightAdj;
+            }
+            SetText(lPos, rPos);
+        }
+
         private void canvas1_TouchDown(object sender, TouchEventArgs e)
         {
-            GetLeftPosition(e);
+            SetSpeed(e);
         }
 
         private void canvas1_TouchMove(object sender, TouchEventArgs e)
         {
-            GetLeftPosition(e);
+            SetSpeed(e);
         }
 
         private void canvas1_TouchUp(object sender, TouchEventArgs e)
         {
-            lPos = 0;
-            SetText(lPos, rPos);
+            Speed = 0;
+            LeftAdj = 0;
+            RightAdj = 0;
+            SendSpeed();
         }
 
         private void canvas2_TouchDown(object sender, TouchEventArgs e)
         {
-            GetRightPosition(e);
+            SetRatio(e);
         }
 
         private void canvas2_TouchMove(object sender, TouchEventArgs e)
         {
-            GetRightPosition(e);
+            SetRatio(e);
         }
 
         private void canvas2_TouchUp(object sender, TouchEventArgs e)
         {
-            rPos = 0;
-            SetText(lPos, rPos);
+            LeftAdj = 0;
+            RightAdj = 0;
+            SendSpeed();
         }
 
         //private void txtIpAddress_KeyDown(object sender, KeyEventArgs e)
