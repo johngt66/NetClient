@@ -26,6 +26,9 @@ namespace ZTRWpf
         int rPos = 0;
         RobotConnection rc = null;
         string lastMsg = string.Empty;
+
+        const int numFactor = 11;
+        const int demFactor = 10;
         public MainWindow()
         {
             InitializeComponent();
@@ -54,14 +57,14 @@ namespace ZTRWpf
         private void GetLeftPosition(TouchEventArgs e)
         {
             var h = (int)(canvas1.ActualHeight) / 2;
-            lPos = (h - (int)e.GetTouchPoint(canvas1).Position.Y) * 22 / h * 5;
+            lPos = (h - (int)e.GetTouchPoint(canvas1).Position.Y) * numFactor / h * demFactor;
             if (Math.Abs(lPos) > 100) lPos = 100 * lPos / Math.Abs(lPos);
             SetText(lPos, rPos);
         }
         private void GetRightPosition(TouchEventArgs e)
         {
             var h = (int)(canvas2.ActualHeight * 0.90d) / 2;
-            rPos = (h - (int)e.GetTouchPoint(canvas2).Position.Y) * 22 / h * 5;
+            rPos = (h - (int)e.GetTouchPoint(canvas2).Position.Y) * numFactor / h * demFactor;
             if (Math.Abs(rPos) > 100) rPos = 100 * rPos / Math.Abs(rPos);
             SetText(lPos, rPos);
         }
@@ -141,7 +144,7 @@ namespace ZTRWpf
             {
                 btnNetwork.IsChecked = false;
                 rc.IpAddress = string.Empty;
-                SetText("Not Connected");
+                SetText("DISCONNECT");
             }
         }
 
